@@ -1,0 +1,18 @@
+{
+  "name": "rntoast",
+  "version": "1.0.1",
+  "description": "A light tip that can be used on both android and iOS.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Toast",
+    "Alert"
+  ],
+  "author": "AFei",
+  "license": "ISC",
+  "dependencies": {
+    "react-native-root-siblings": "^3.0.0"
+  }
+}
