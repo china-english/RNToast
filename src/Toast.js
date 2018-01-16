@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import RootSiblings from 'react-native-root-siblings';
-import ToastContainer, { positions, durations } from './ToastContainer';
+import ToastContainer, { durations } from './ToastContainer';
 
 class Toast extends Component {
   static displayName = 'Toast';
   static propTypes = ToastContainer.propTypes;
-  static positions = positions;
   static durations = durations;
 
   static show = (props) => new RootSiblings(<ToastContainer
@@ -22,24 +21,24 @@ class Toast extends Component {
     }
   };
 
-  _toast = null;
+  toast = null;
 
   componentWillMount = () => {
-    this._toast = new RootSiblings(<ToastContainer
+    this.toast = new RootSiblings(<ToastContainer
       {...this.props}
       duration={0}
     />);
   };
 
   componentWillReceiveProps = (nextProps) => {
-    this._toast.update(<ToastContainer
+    this.toast.update(<ToastContainer
       {...nextProps}
       duration={0}
     />);
   };
 
   componentWillUnmount = () => {
-    this._toast.destroy();
+    this.toast.destroy();
   };
 
   render() {
