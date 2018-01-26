@@ -1,6 +1,6 @@
 {
   "name": "rntoast",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A light tip that can be used on both android and iOS.",
   "main": "index.js",
   "scripts": {
