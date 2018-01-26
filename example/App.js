@@ -13,7 +13,7 @@ import {
   TouchableHighlight
 } from 'react-native';
 
-import Toast from './src/Toast';
+import Toast from 'rntoast';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' +
@@ -47,7 +47,9 @@ export default class App extends Component<{}> {
             type: "info",
             confirm: true
           })
-        } style={{marginTop: 200}}>
+        }
+        style={{marginTop: 200}}
+        >
           <Text>alert</Text>
         </TouchableHighlight>
       </View>
