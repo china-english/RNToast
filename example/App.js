@@ -10,17 +10,11 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableHighlight
+  TouchableHighlight,
+  Image,
 } from 'react-native';
 
 import Toast from 'rntoast';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' +
-    'Cmd+D or shake for dev menu',
-  android: 'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
 
 export default class App extends Component<{}> {
   render() {
@@ -30,27 +24,92 @@ export default class App extends Component<{}> {
           Welcome to React Native!
         </Text>
         <Text style={styles.instructions}>
-          To get started, edit App.js
-        </Text>
-        <Text style={styles.instructions}>
-          {instructions}
+          This is my first package !
         </Text>
         <TouchableHighlight onPress={()=>
           Toast.show({
-            content: 'text',
-            duration: 2000,
+            content: 'This is the default Toast.',
+          })
+        }
+        style={{marginTop: 10}}
+        >
+          <Text>DEFAULT</Text>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={()=>
+          Toast.show({
+            content: 'This Toast with button',
+            duration: 0,
             shadow: true,
             animation: false,
             hideOnPress: false,
             delayShow: 0,
-            // position: -10,
-            type: "info",
-            confirm: true
+            confirm: false
           })
         }
-        style={{marginTop: 200}}
+        style={{marginTop: 10}}
         >
-          <Text>alert</Text>
+          <Text>With Button</Text>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={()=>
+          Toast.show({
+            content: 'Use type to change colors,just suport success/info/error/warning/default',
+            duration: 0,
+            shadow: true,
+            animation: false,
+            hideOnPress: false,
+            delayShow: 0,
+            type: 'info',
+            confirm: false
+          })
+        }
+        style={{marginTop: 10}}
+        >
+          <Text>Info Toast</Text>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={()=>
+          Toast.show({
+            content: <View style={styles.toastView}>
+              <Text>use image in Toast</Text>
+              <Image source={require('example/Images/example.png')} style={styles.image} />
+            </View>,
+            containerStyle: {
+              justifyContent: 'center',
+              alignItems: 'center',
+            },
+            shadow: true,
+            animation: false,
+            hideOnPress: false,
+            delayShow: 0,
+            confirm: false
+          })
+        }
+        style={{marginTop: 10}}
+        >
+          <Text>Image Toast</Text>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={()=>
+          Toast.show({
+            content: <View style={styles.toastView}>
+              <Text>use image in Toast</Text>
+              <Image source={require('example/Images/example.png')} style={styles.image} />
+            </View>,
+            containerStyle: {
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+            },
+            confirmStyle: {marginTop: 20, marginLeft: 0},
+            duration: 0,
+            shadow: true,
+            animation: false,
+            hideOnPress: false,
+            delayShow: 0,
+            confirm: false
+          })
+        }
+        style={{marginTop: 10}}
+        >
+          <Text>with image button</Text>
         </TouchableHighlight>
       </View>
     );
@@ -74,4 +133,12 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  image: {
+    width: 100,
+    height: 100,
+  },
+  toastView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });

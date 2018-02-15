@@ -12,7 +12,7 @@ import {
   Easing,
   Keyboard,
   TouchableOpacity,
-  Platform
+  Platform,
 } from 'react-native'
 
 const animatedDuration = 200
@@ -27,28 +27,43 @@ let styles = {
   },
   containerStyle: {
     padding: 10,
-    backgroundColor: 'grey',
     width: width - 40,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginHorizontal: 40,
     borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   textStyle: {
     fontSize: 16,
     color: '#fff',
-    textAlign: 'center',
   },
-  touchableOpacity: {
-    backgroundColor: '#61B843',
-    marginTop: 20,
-    height: 40,
-    width: 80,
+  textStyleWithButton: {
+    fontSize: 16,
+    color: '#fff',
+    width: width - 120,
+  },
+  confirmStyle: {
+    backgroundColor: 'transparent',
+    marginLeft: 10,
+    width: 50,
+    padding: 6,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderWidth: 0.5,
+    borderColor: '#fff',
+  },
+  confirmTextStyle: {
+    color: '#fff',
   }
 }
 
+const colors = {
+  default: '#999999',
+  success: '#5cb85c',
+  info: '#62B1F6',
+  error: '#d9534f',
+  warning: '#f0ad4e',
+}
 class ToastContainer extends Component {
 
   static propTypes = {
@@ -67,7 +82,10 @@ class ToastContainer extends Component {
     onShow: PropTypes.func,
     onShown: PropTypes.func,
     confirm: PropTypes.bool,
-    confirmText: PropTypes.string
+    confirmStyle: ViewPropTypes.style,
+    confirmText: PropTypes.string,
+    confirmTextStyle: Text.propTypes.style,
+    type: PropTypes.string,
   };
 
   static defaultProps = {
@@ -78,7 +96,7 @@ class ToastContainer extends Component {
     delayShow: 0,
     hideOnPress: true,
     confirm: false,
-    confirmText: 'ok'
+    confirmText: 'ok',
   };
 
   constructor () {
@@ -182,19 +200,19 @@ class ToastContainer extends Component {
               styles.containerStyle,
               props.containerStyle,
               {opacity: this.state.opacity},
-
+              {backgroundColor: colors[props.type] || colors['default']}
           )}
           pointerEvents='none'
           ref={(ele) => this.root = ele}
           >
           {
             typeof(props.content) === 'string'
-            ? <Text style={Object.assign({}, styles.textStyle, props.textStyle)}>{props.children}</Text>
+            ? <Text allowFontScaling={false} style={Object.assign({}, props.textStyle, (props.confirm === true || props.duration <= 0) ? styles.textStyleWithButton : styles.textStyle)}>{props.children}</Text>
             : props.children
           }
-            {props.confirm === true
-              ? <TouchableOpacity onPress={this.hide} style={styles.touchableOpacity}>
-              <Text>{this.props.confirmText}</Text>
+            {(props.confirm === true) || (props.duration <= 0)
+              ? <TouchableOpacity onPress={this.hide} style={Object.assign({}, styles.confirmStyle, props.confirmStyle)}>
+              <Text allowFontScaling={false} style={Object.assign({}, styles.confirmTextStyle, props.confirmTextStyle)}>{this.props.confirmText}</Text>
             </TouchableOpacity> : null}
         </Animated.View>
       </TouchableWithoutFeedback>

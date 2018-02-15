@@ -42,6 +42,7 @@ Toast.show({
 | textStyle | style |  | 传入Toast中的内容为string时有效 |
 | delayShow | number | 0 | 点击后延迟多久显示Toast |
 | hideOnPress | bool | true | 点击Toast是否关闭Toast |
+| type | string | default | 支持success(#5cb85c)/info(#62B1F6)/error(#d9534f)/warning(#f0ad4e)/default(#999999) |
 
 
 ### 可调用函数
