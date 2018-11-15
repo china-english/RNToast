@@ -2,7 +2,12 @@
 
 RNToast 功能类似于native-base的Toast，但是不同的是RNToast除了支持提示文字以外，还增加了图片的支持(android)。
 
+# 效果图
 
+![android_default](https://github.com/china-english/RNToast/tree/master/assets/Android1.jpg)
+![android_image](https://github.com/china-english/RNToast/tree/master/assets/Android2.jpg)
+![ios_default](https://github.com/china-english/RNToast/tree/master/assets/iPhoneX1.jpg)
+![ios_image](https://github.com/china-english/RNToast/tree/master/assets/iPhoneX2.jpg)
 
 ## 如何使用
 
