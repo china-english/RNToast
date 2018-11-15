@@ -26,6 +26,9 @@ export default class App extends Component<{}> {
         <Text style={styles.instructions}>
           This is my first package !
         </Text>
+        <Text style={styles.instructions}>
+          This component has suport iPhoneX !
+        </Text>
         <TouchableHighlight onPress={()=>
           Toast.show({
             content: 'This is the default Toast.',
