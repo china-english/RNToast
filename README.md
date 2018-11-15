@@ -4,14 +4,12 @@ RNToast 功能类似于native-base的Toast，但是不同的是RNToast除了支�
 
 # 效果图
 
-<figure class="half">
+<div>
     <img src="https://github.com/china-english/RNToast/blob/master/assets/Android1.jpg?raw=true">
     <img src="https://github.com/china-english/RNToast/blob/master/assets/Android2.jpg?raw=true">
-</figure>
-<figure class="half">
     <img src="https://github.com/china-english/RNToast/blob/master/assets/iPhoneX1.jpg?raw=true">
     <img src="https://github.com/china-english/RNToast/blob/master/assets/iPhoneX2.jpg?raw=true">
-</figure>
+</div>
 
 ## 如何使用
 
