@@ -1,7 +1,5 @@
-import React, {
-  Component
-} from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   ViewPropTypes,
   View,
@@ -10,20 +8,21 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Easing,
-  Keyboard,
   TouchableOpacity,
   Platform,
-} from 'react-native'
+} from 'react-native';
 
-const animatedDuration = 200
-const {width, height} = Dimensions.get('window')
+const { width, height } = Dimensions.get('window');
+const isIOS = Platform.OS === 'ios';
+const isIphoneX = isIOS && (height === 812 || width === 812);
+const animatedDuration = 200;
 
-let styles = {
+const styles = {
   defaultStyle: {
     position: 'absolute',
     width,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   containerStyle: {
     padding: 10,
@@ -31,7 +30,7 @@ let styles = {
     marginHorizontal: 40,
     borderRadius: 5,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textStyle: {
     fontSize: 16,
@@ -54,18 +53,17 @@ let styles = {
   },
   confirmTextStyle: {
     color: '#fff',
-  }
-}
-
+  },
+};
 const colors = {
   default: '#999999',
   success: '#5cb85c',
   info: '#62B1F6',
   error: '#d9534f',
   warning: '#f0ad4e',
-}
-class ToastContainer extends Component {
+};
 
+class ToastContainer extends React.Component {
   static propTypes = {
     ...ViewPropTypes,
     containerStyle: ViewPropTypes.style,
@@ -89,48 +87,24 @@ class ToastContainer extends Component {
   };
 
   static defaultProps = {
+    containerStyle: null,
     visible: false,
+    position: isIphoneX ? 44 : 20,
     duration: 3000,
     animation: true,
     opacity: 1,
+    textStyle: null,
     delayShow: 0,
     hideOnPress: true,
+    onHide: () => null,
+    onHidden: () => null,
+    onShow: () => null,
+    onShown: () => null,
     confirm: false,
     confirmText: 'ok',
-  };
-
-  constructor () {
-    super(...arguments)
-    this.state = {
-      visible: this.props.visible,
-      opacity: new Animated.Value(0)
-    }
-  }
-
-  componentDidMount = () => {
-    if (this.state.visible) {
-      this.showTimeout = setTimeout(() => this.show(), this.props.delayShow)
-    }
-  };
-
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.visible !== this.props.visible) {
-      if (nextProps.visible) {
-        clearTimeout(this.showTimeout)
-        clearTimeout(this.hideTimeout)
-        this.showTimeout = setTimeout(() => this.show(), this.props.delayShow)
-      } else {
-        this.hide()
-      }
-
-      this.setState({
-        visible: nextProps.visible
-      })
-    }
-  };
-
-  componentWillUnmount = () => {
-    this.hide()
+    confirmStyle: null,
+    confirmTextStyle: null,
+    type: '',
   };
 
   animating = false;
@@ -138,98 +112,169 @@ class ToastContainer extends Component {
   hideTimeout = null;
   showTimeout = null;
 
+  constructor(props) {
+    super(props);
+    const { visible } = this.props;
+    this.state = {
+      visible,
+      opacity: new Animated.Value(0),
+    };
+  }
+
+  componentDidMount() {
+    const { delayShow } = this.props;
+    const { visible } = this.state;
+    if (visible) {
+      this.showTimeout = setTimeout(() => this.show(), delayShow);
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    const { visible, delayShow } = this.props;
+
+    if (nextProps.visible !== visible) {
+      if (nextProps.visible) {
+        clearTimeout(this.showTimeout);
+        clearTimeout(this.hideTimeout);
+        this.showTimeout = setTimeout(() => this.show(), delayShow);
+      } else {
+        this.hide();
+      }
+
+      this.setState({ visible: nextProps.visible });
+    }
+  };
+
+  componentWillUnmount() {
+    this.hide();
+  }
+
   show = () => {
-    clearTimeout(this.showTimeout)
+    const {
+      onShow, siblingManager: PropSiblingManager, opacity: PropOpacity,
+      onShown,
+      animation, duration, confirm,
+    } = this.props;
+    const { opacity } = this.state;
+
+    clearTimeout(this.showTimeout);
     if (!this.animating) {
-      clearTimeout(this.hideTimeout)
-      this.animating = true
+      clearTimeout(this.hideTimeout);
+      this.animating = true;
       this.root.setNativeProps({
-        pointerEvents: 'auto'
-      })
-      this.props.onShow && this.props.onShow(this.props.siblingManager)
-      Animated.timing(this.state.opacity, {
-        toValue: this.props.opacity,
-        duration: this.props.animation ? animatedDuration : 0,
-        easing: Easing.out(Easing.ease)
-      }).start(({finished}) => {
+        pointerEvents: 'auto',
+      });
+      if (onShow) onShow(PropSiblingManager);
+      Animated.timing(opacity, {
+        toValue: PropOpacity,
+        duration: animation ? animatedDuration : 0,
+        easing: Easing.out(Easing.ease),
+      }).start(({ finished }) => {
         if (finished) {
-          this.animating = !finished
-          this.props.onShown && this.props.onShown(this.props.siblingManager)
-          if (this.props.duration > 0 && !this.props.confirm ) {
-            this.hideTimeout = setTimeout(() => this.hide(), this.props.duration)
+          this.animating = !finished;
+          if (onShown) onShown(PropSiblingManager);
+          if (duration > 0 && !confirm) {
+            this.hideTimeout = setTimeout(() => this.hide(), duration);
           }
         }
-      })
+      });
     }
   };
 
   hide = () => {
-    clearTimeout(this.showTimeout)
-    clearTimeout(this.hideTimeout)
+    const {
+      onHide, siblingManager, animation,
+      onHidden,
+    } = this.props;
+    const { opacity } = this.state;
+    clearTimeout(this.showTimeout);
+    clearTimeout(this.hideTimeout);
     if (!this.animating) {
       this.root.setNativeProps({
-        pointerEvents: 'none'
-      })
-      this.props.onHide && this.props.onHide(this.props.siblingManager)
-      Animated.timing(this.state.opacity, {
+        pointerEvents: 'none',
+      });
+      if (onHide) onHide(siblingManager);
+      Animated.timing(opacity, {
         toValue: 0,
-        duration: this.props.animation ? animatedDuration : 0,
-        easing: Easing.in(Easing.ease)
-      }).start(({finished}) => {
+        duration: animation ? animatedDuration : 0,
+        easing: Easing.in(Easing.ease),
+      }).start(({ finished }) => {
         if (finished) {
-          this.animating = false
-          this.props.onHidden && this.props.onHidden(this.props.siblingManager)
+          this.animating = false;
+          if (onHidden) onHidden(siblingManager);
         }
-      })
+      });
     }
   };
 
-  renderModal = (props, position) =>
-    <View
-      style={[
-        styles.defaultStyle,
-        position
-      ]}
-      pointerEvents='box-none'
+  renderModal = (position) => {
+    const {
+      hideOnPress,
+      confirm, duration,
+      confirmText, type, content,
+      containerStyle, textStyle, confirmStyle, confirmTextStyle,
+      children,
+    } = this.props;
+    const {
+      opacity,
+    } = this.state;
+    return (
+      <View
+        style={[
+          styles.defaultStyle,
+          position,
+        ]}
+        pointerEvents="box-none"
       >
-      <TouchableWithoutFeedback
-        onPress={this.props.hideOnPress ? this.hide : null}
+        <TouchableWithoutFeedback
+          onPress={hideOnPress ? this.hide : null}
         >
-        <Animated.View
-          style={Object.assign({},
+          <Animated.View
+            style={Object.assign({},
               styles.containerStyle,
-              props.containerStyle,
-              {opacity: this.state.opacity},
-              {backgroundColor: colors[props.type] || colors['default']}
-          )}
-          pointerEvents='none'
-          ref={(ele) => this.root = ele}
+              containerStyle,
+              { opacity },
+              { backgroundColor: colors[type] || colors.default })}
+            pointerEvents="none"
+            ref={(ele) => { if (ele) this.root = ele; }}
           >
-          {
-            typeof(props.content) === 'string'
-            ? <Text allowFontScaling={false} style={Object.assign({}, props.textStyle, (props.confirm === true || props.duration <= 0) ? styles.textStyleWithButton : styles.textStyle)}>{props.children}</Text>
-            : props.children
-          }
-            {(props.confirm === true) || (props.duration <= 0)
-              ? <TouchableOpacity onPress={this.hide} style={Object.assign({}, styles.confirmStyle, props.confirmStyle)}>
-              <Text allowFontScaling={false} style={Object.assign({}, styles.confirmTextStyle, props.confirmTextStyle)}>{this.props.confirmText}</Text>
-            </TouchableOpacity> : null}
-        </Animated.View>
-      </TouchableWithoutFeedback>
-    </View>
-
-  render () {
-    const { props } = this;
+            {
+              typeof content === 'string'
+                ? <Text allowFontScaling={false} style={Object.assign({}, textStyle, (confirm === true || duration <= 0) ? styles.textStyleWithButton : styles.textStyle)}>{children}</Text>
+                : children
+            }
+            {(confirm === true) || (duration <= 0)
+              ? (
+                <TouchableOpacity
+                  onPress={this.hide}
+                  style={[styles.confirmStyle, confirmStyle]}
+                >
+                  <Text
+                    allowFontScaling={false}
+                    style={[styles.confirmTextStyle, confirmTextStyle]}
+                  >
+                    {confirmText}
+                  </Text>
+                </TouchableOpacity>
+              ) : null}
+          </Animated.View>
+        </TouchableWithoutFeedback>
+      </View>
+    );
+  }
+  render() {
+    const { position: propPosition } = this.props;
+    const { visible } = this.state;
 
     // 正数距离顶部距离，负数距离底部距离， 0居中
-    let position = props.position ? {
-      [props.position < 0 ? 'bottom' : 'top']: Math.abs(props.position)
+    const position = propPosition ? {
+      [propPosition < 0 ? 'bottom' : 'top']: Math.abs(propPosition),
     } : {
-      top: 20
-    }
+      top: isIphoneX ? 44 : 20,
+    };
 
-    return (this.state.visible || this.animating) ? this.renderModal(props, position) : null
+    return (visible || this.animating) ? this.renderModal(position) : null;
   }
 }
 
-export default ToastContainer
+export default ToastContainer;

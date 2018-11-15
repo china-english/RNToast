@@ -1,6 +1,6 @@
 {
   "name": "rntoast",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "A light tip that can be used on both android and iOS.",
   "main": "index.js",
   "scripts": {
@@ -10,8 +10,8 @@
     "Toast",
     "Alert"
   ],
-  "author": "AFei",
-  "license": "ISC",
+  "author": "Fei",
+  "license": "MIT",
   "dependencies": {
     "react-native-root-siblings": "^3.0.0"
   }
