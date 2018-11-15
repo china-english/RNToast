@@ -4,10 +4,14 @@ RNToast 功能类似于native-base的Toast，但是不同的是RNToast除了支�
 
 # 效果图
 
-![android_default](https://github.com/china-english/RNToast/blob/master/assets/Android1.jpg?raw=true)
-![android_image](https://github.com/china-english/RNToast/blob/master/assets/Android2.jpg?raw=true)
-![ios_default](https://github.com/china-english/RNToast/blob/master/assets/iPhoneX1.jpg?raw=true)
-![ios_image](https://github.com/china-english/RNToast/blob/master/assets/iPhoneX2.jpg?raw=true)
+<figure class="half">
+    <img src="https://github.com/china-english/RNToast/blob/master/assets/Android1.jpg?raw=true">
+    <img src="https://github.com/china-english/RNToast/blob/master/assets/Android2.jpg?raw=true">
+</figure>
+<figure class="half">
+    <img src="https://github.com/china-english/RNToast/blob/master/assets/iPhoneX1.jpg?raw=true">
+    <img src="https://github.com/china-english/RNToast/blob/master/assets/iPhoneX2.jpg?raw=true">
+</figure>
 
 ## 如何使用
 
